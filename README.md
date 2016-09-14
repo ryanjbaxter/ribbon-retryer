@@ -1,10 +1,10 @@
 # Ribbon Retryer
 
 In Spring Cloud Brixton we do not use the Ribbon `RestClient` to make service requests so
-you cannot rely on the retry functionality present in that class to reatempt failed requests.
+you cannot rely on the retry functionality present in that class to reattempt failed requests.
 
-One solution to this problem is to use Spring Retry in conjunction with Ribbon to add your
-own retry logic to your applications using Ribbon.
+One solution to this problem is to use [Spring Retry](https://github.com/spring-projects/spring-retry) 
+in conjunction with Ribbon to add your own retry logic to your applications using Ribbon.
 
 **Warning:**  The above statements only apply when using Ribbon directly
 in Spring Cloud Brixton.  If you are using 
@@ -31,8 +31,9 @@ class RetryerService {
 	}
 }
 ```
-The `RestTemplate` bean being injected into our `RetryerService` is load
-balanced meaning it is using Ribbon.  The `getContent` method is making a
+The `RestTemplate` bean being injected into our `RetryerService` is "[load
+balanced](http://cloud.spring.io/spring-cloud-static/spring-cloud.html#_spring_resttemplate_as_a_load_balancer_client)" 
+meaning it is using the Ribbon load balancer.  The `getContent` method is making a
 request to `service1`.  This service is configured in `application.yml`.
 
 ```
@@ -46,7 +47,7 @@ As you can see, `service1` is configured to call either `example.com` or
 balancing, when `getContent` is called it will rotate back and forth between the
 two URLs.
 
-Since `service1.com` does not exist, requests to that URL will fail.  This
+Since `service1.com` does not exist, requests to that URL will fail, this
 is why every other request to http://localhost:8080 fails.
 
 To fix this problem in our simple sample we can retry the request on failure.
