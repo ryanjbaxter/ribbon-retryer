@@ -1,0 +1,3 @@
+service1:
+  ribbon:
+    listOfServers: example.com,service1.com
