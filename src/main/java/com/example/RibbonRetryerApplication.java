@@ -7,7 +7,6 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.retry.annotation.EnableRetry;
-import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,12 +32,6 @@ public class RibbonRetryerApplication {
 
 	@RequestMapping("/")
 	public String index() {
-		return retryer.getContent();
-	}
-
-	@RequestMapping("/retry")
-	@Retryable
-	public String indexRetry() {
 		return retryer.getContent();
 	}
 }

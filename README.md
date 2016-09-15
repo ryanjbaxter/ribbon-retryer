@@ -12,9 +12,11 @@ Ribbon in conjustion with Zuul or Feign different retry logic applies.
 
 # Usage
 
-Run the app by executing `./mvnw spring-boot:run`.  Hit http://localhost:8080.
-Every other time you hit this URL you will get an error page.  To understand why
- this is happening you can take a look at `RetryerService.getContent` method.
+Run the app by executing `./mvnw spring-boot:run`.  Hit http://localhost:8080 and
+you should see the same content as if you went to http://example.com.
+
+Lets take a look at the code executed when you hot the root of the webapp.
+Most of the heavy lifting happens in `RetryerService`.
  
 ```
 @Service
@@ -39,21 +41,21 @@ request to `service1`.  This service is configured in `application.yml`.
 ```
 service1:
   ribbon:
-    listOfServers: example.com,service1.com
+    listOfServers: example.com,retryableserver.com
 ```
 
 As you can see, `service1` is configured to call either `example.com` or
-`service1.com`.  Since the Ribbon load balancer will use round robin load
+`retryableserver.com`.  Since the Ribbon load balancer will use round robin load
 balancing, when `getContent` is called it will rotate back and forth between the
 two URLs.
 
-Since `service1.com` does not exist, requests to that URL will fail, this
-is why every other request to http://localhost:8080 fails.
+If you try an hit `retryableserver.com` in your browser you will notice you get an error due
+to the fact `retryableserver.com` is not a registered DNS address.  However in our app we 
+always get the content from `example.com`, why is that?
 
-To fix this problem in our simple sample we can retry the request on failure.
-This is where Spring Retry comes in.  If you hit http://localhost:8080/retry
-you will notice you never get an error page.  This is because the `/retry`
-endpoint calls `getContent` but is annotated with `@Retryable`, meaning if an
-error occurs the method will be called again.  So when we get an error we will
-make a second call which will succeed (due to the round robin load balancing from
-Ribbon).
+The reason this works is because we have made some enhancements to the Ribbon load
+balancer used by Spring Cloud.  If you look at the class `RetryableRibbonLoadBalancerCliet`
+you can see that we are using the `RetryTemplate` from Spring Retry to wrap our call to the `execute` method.
+When Ribbon selects `retryableserver.com` as the URL to use for our request, the request
+request will fail but Spring Retry will retry the request again and due to the round robin
+load balancing in Ribbon the next request will succeed.

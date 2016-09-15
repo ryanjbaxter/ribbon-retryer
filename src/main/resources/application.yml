@@ -1,3 +1,3 @@
 service1:
   ribbon:
-    listOfServers: example.com,service1.com
+    listOfServers: example.com,retryableserver.com
