@@ -10,14 +10,17 @@ import org.springframework.retry.support.RetryTemplate;
 import java.io.IOException;
 
 public class RetryableRibbonLoadBalancerClient extends RibbonLoadBalancerClient {
-    public RetryableRibbonLoadBalancerClient(SpringClientFactory clientFactory) {
+
+    private  RetryTemplate retryTemplate;
+
+    public RetryableRibbonLoadBalancerClient(SpringClientFactory clientFactory, RetryTemplate retryTemplate) {
         super(clientFactory);
+        this.retryTemplate = retryTemplate;
     }
 
     @Override
     public <T> T execute(String serviceId, LoadBalancerRequest<T> request) throws IOException {
-        RetryTemplate template = new RetryTemplate();
-        return template.execute(new RetryCallback<T, IOException>() {
+        return retryTemplate.execute(new RetryCallback<T, IOException>() {
             @Override
             public T doWithRetry(RetryContext context) throws IOException{
                 return RetryableRibbonLoadBalancerClient.super.execute(serviceId, request);

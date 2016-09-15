@@ -10,6 +10,7 @@ import org.springframework.cloud.netflix.ribbon.RibbonClientSpecification;
 import org.springframework.cloud.netflix.ribbon.SpringClientFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.retry.support.RetryTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,7 @@ public class Config {
 
     @Bean
     public RetryableRibbonLoadBalancerClient retryableRibbonLoadBalancerClient() {
-        return new RetryableRibbonLoadBalancerClient(springClientFactory());
+        return new RetryableRibbonLoadBalancerClient(springClientFactory(), new RetryTemplate());
     }
 
     @Bean
