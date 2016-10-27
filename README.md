@@ -7,8 +7,10 @@ One solution to this problem is to use [Spring Retry](https://github.com/spring-
 in conjunction with Ribbon to add your own retry logic to your applications using Ribbon.
 
 **Warning:**  The above statements only apply when using Ribbon directly
-in Spring Cloud Brixton (all releases), Camden.RELEASE, and Camden.SR1.  If you are using 
-Ribbon in conjustion with Zuul or Feign different retry logic applies.
+in Spring Cloud Brixton (all releases), Camden.RELEASE, and Camden.SR1.  If you are using a version
+of Spring Cloud that is newer than Camden.SR1 the Spring Retry functionality is part of Spring Cloud
+itself.  Also, if you are using 
+Ribbon in conjunction with Zuul or Feign in Brixton or Camden different retry logic applies.
 
 # Usage
 
