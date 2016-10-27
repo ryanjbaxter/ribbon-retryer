@@ -7,7 +7,7 @@ One solution to this problem is to use [Spring Retry](https://github.com/spring-
 in conjunction with Ribbon to add your own retry logic to your applications using Ribbon.
 
 **Warning:**  The above statements only apply when using Ribbon directly
-in Spring Cloud Brixton.  If you are using 
+in Spring Cloud Brixton (all releases), Camden.RELEASE, and Camden.SR1.  If you are using 
 Ribbon in conjustion with Zuul or Feign different retry logic applies.
 
 # Usage
@@ -15,7 +15,7 @@ Ribbon in conjustion with Zuul or Feign different retry logic applies.
 Run the app by executing `./mvnw spring-boot:run`.  Hit http://localhost:8080 and
 you should see the same content as if you went to http://example.com.
 
-Lets take a look at the code executed when you hot the root of the webapp.
+Lets take a look at the code executed when you hit the root of the webapp.
 Most of the heavy lifting happens in `RetryerService`.
  
 ```
